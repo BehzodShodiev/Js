@@ -1,0 +1,243 @@
+1) let introduction = ["Hello", "I" , "am", "Sarah"];
+let [greeting, pronoun] = introduction;
+
+console.log(greeting);//
+console.log(pronoun);//
+
+1.1) let greeting, pronoun;
+[greeting, pronoun] = introduction;
+**********************************************************
+2) let [greeting,...intro] = ["Hello", "I" , "am", "Sarah"];
+
+console.log(greeting);//
+console.log(intro);//
+
+**********************************************************
+2.1)const foo = ['one', 'two'];
+
+const [red, yellow, green, blue] = foo;
+console.log(red); 
+console.log(yellow);
+console.log(green); 
+console.log(blue);
+**********************************************************
+3) function getArray() {
+    return ["Hello", "I" , "am", "Sarah"];
+} 
+let [greeting,pronoun] = getArray();
+
+console.log(greeting);
+console.log(pronoun);
+
+3.1)
+function getItems() {
+    return null;
+}
+
+let [x = 1, y = 2] = getItems();
+
+Uncaught TypeError: getItems is not a function or its return value is not iterable
+
+**********************************************************
+DEFAULT VALUES
+4) let [greeting = "hi",name = "Sarah"] = ["hello"];
+
+console.log(greeting);//"Hello"
+console.log(name);
+**********************************************************
+SWAPPING
+5) let a = 3;
+let b = 6;
+
+[a,b] = [b,a];
+
+console.log(a)
+console.log(b)
+
+5.1)
+const arr = [1,2,3];
+[arr[2], arr[1]] = [arr[1], arr[2]];
+console.log(arr);
+**********************************************************
+OBJECT DESTRUCTURING
+6) const user = {
+    id: 42,
+    isVerified: true
+};
+
+const {id, isVerified} = user;
+
+console.log(id);
+console.log(isVerified);
+
+
+**********************************************************
+7)let a, b;
+({a, b} = {a: 1, b: 2});
+
+
+**********************************************************
+ASSIGNING TO A NEW VARIABLE
+8)const o = {p: 42, q: true};
+const {p: foo, q: bar} = o;
+
+console.log(foo);
+console.log(bar);
+
+
+**********************************************************
+DEFAULT VALUES OF AN OBJECT
+9)const {a = 10, b = 5} = {a: 3};
+
+console.log(a);
+console.log(b);
+
+9.1)const {a: aa = 10, b: bb = 5} = {a: 3};
+
+console.log(aa);
+console.log(bb);
+
+
+**********************************************************
+10)const user = {
+  id: 42,
+  displayName: 'jdoe',
+  fullName: {
+    firstName: 'John',
+    lastName: 'Doe'
+  }
+};
+
+function userId({id}) {
+  return id;
+}
+
+function whois({displayName, fullName: {firstName: name}}) {
+  return `${displayName} is ${name}`;
+}
+********************************************************************************
+11)function drawChart({size = 'big', coords = {x: 0, y: 0}, radius = 25} = {}) {
+  console.log(size, coords, radius);
+}
+
+drawChart({
+  coords: {x: 18, y: 30},
+  radius: 30
+});
+***********************************************************
+Nested object and array destructuring
+12) const metadata = {
+  title: 'Scratchpad',
+  translations: [
+    {
+      locale: 'de',
+      localization_tags: [],
+      title: 'JavaScript-Umgebung'
+    }
+  ]
+};
+
+let {
+  title: englishTitle, 
+  translations: [
+    {
+       title: localeTitle, 
+    },
+  ],
+} = metadata;
+
+console.log(englishTitle); 
+console.log(localeTitle);  
+*****************************************************************
+13)const people = [
+  {
+    name: 'Mike Smith',
+    family: {
+      mother: 'Jane Smith',
+      father: 'Harry Smith',
+      sister: 'Samantha Smith'
+    },
+    age: 35
+  },
+  {
+    name: 'Tom Jones',
+    family: {
+      mother: 'Norah Jones',
+      father: 'Richard Jones',
+      brother: 'Howard Jones'
+    },
+    age: 25
+  }
+];
+
+for (const {name: n, family: {father: f}} of people) {
+  console.log('Name: ' + n + ', Father: ' + f);
+}
+**********************************************************************
+COMPUTED OBJECT PROPERTY Name
+14)let key = 'z';
+let {[key]: foo} = {z: 'bar'};
+
+console.log(foo);
+
+****************************************************************
+15)let {a, b, ...rest} = {a: 10, b: 20, c: 30, d: 40}
+a;
+b; 
+rest;
+
+*******************************************************************
+Invalid JavaScript identifier as a property name
+
+16)const foo = { 'fizz-buzz': true };
+const { 'fizz-buzz': fizzBuzz } = foo;
+
+console.log(fizzBuzz);
+*****************************************************************
+17) const props = [
+  { id: 1, name: 'Fizz'},
+  { id: 2, name: 'Buzz'},
+  { id: 3, name: 'FizzBuzz'}
+];
+
+const [,, { name }] = props;
+
+console.log(name);
+********************************************
+The prototype chain is looked up when the object is deconstructed
+When deconstructing an object, if a property is not accessed in itself, it will continue to look up along the prototype chain.
+
+
+18)let obj = {self: '123'};
+obj.__proto__.prot = '456';
+const {self, prot} = obj;
+
+
+
+//
+...(RESt engine)
+
+
+
+
+const user = {
+   id: 42,
+   displayName: 'jdoe',
+   fullName: {
+     firstName: 'John',
+     lastName: 'Doe'
+   }
+ };
+let {fullName:{firstNamee}} = user
+why no error ?
+**************************
+ function whois({displayName, fullName: {firstName: name}}) {
+   return `${displayName} is ${name}`;
+ }
+
+**************************************
+let obj = {self: '123'};
+obj.__proto__.prot = '456';
+const {self, toString} = obj;
+console.log(self, toString());
+
