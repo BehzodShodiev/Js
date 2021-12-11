@@ -102,6 +102,29 @@ console.log(pronoun);//"I"
 ```
 > **Note**: So, it looks for the order of items on LHS and RHS arrays, and then assigns the variables with the same order in both arrays.
 
+Consider another example: 
+
+```javascript 
+function getItems() {
+    return null;
+}
+
+let [x = 1, y = 2] = getItems();
+
+Uncaught TypeError: getItems is not a function or its return value is not iterable
+```
+
+The return type should be iterable. For example, an **array** or **string**.
+
+Look at another example:
+
+```javascript 
+function getItems() {
+    return "a ";
+}
+
+let [x = 1, y = 2] = getItems(); // x = a, y = ' ';
+```
 
 ### Using Default Values
 
@@ -197,7 +220,7 @@ Wait, what just happened?! Oh, we forgot to add () before the curly brackets.
 
 In the case of objects, it throws an error if you don't enclose the assingment with **( )** because the LHS **{ }** is read as block scope. When we enclose with **( )** the code inside is read as an expression.
 
-```javascript 
+ ```javascript 
 let person = {name: "Sarah", country: "Nigeria", job: "Developer"};
 let name, country, job;
 
@@ -260,7 +283,7 @@ let person = {name: "Sarah", country: "Nigeria", job: "Developer"};
 let {name:foo = "myName", friend: bar = "Annie"} = person;
 
 console.log(foo);//"Sarah"
-console.log(bar);//"Annie"
+console.log(bar);//"Annie" 
 ```
 
 So  *name* was extracted from person and assigned to *foo*. *friend*, on the other hand, was *undefined* in *person*, so the new variable *bar* was assigned the default value.
@@ -333,7 +356,7 @@ Here, the remaining properties whose keys where not part of the variable names l
 
 ```javascript 
 function person({name: x, job: y} = {}) {
-    console.log(x);
+    console.log(name);
 }
 
 person({name: "Michelle"});//"Michelle"
@@ -341,15 +364,130 @@ person();//undefined
 person(friend);//Error : friend is not defined
 ```
 
-Notice the {} on the right hand side of the parameters object. It makes it possible for us to call the function without passing any arguments. That is why we got undefined. If we remove it, we'll get an error message.
+Notice the **{ }** on the right hand side of the parameters object. It makes it possible for us to call the function without passing any arguments. That is why we got undefined. If we remove it, we'll get an error message.
 
 
 We can also assign default values to the parameters:
 
 ```javascript 
 function person({name: x = "Sarah", job: y = "Developer"} = {}) {
-    console.log(x);
+    console.log(name);
 }
 
 person({name});//"Sarah"
+```
+
+### Some more array/object nested examples
+
+#### Example #1
+
+```javascript 
+const user = {
+  id: 42,
+  displayName: 'jdoe',
+  fullName: {
+    firstName: 'John',
+    lastName: 'Doe'
+  }
+};
+
+function userId({id}) {
+  return id; // 42
+}
+
+function whois({displayName, fullName: {firstName: name}}) {
+  return `${displayName} is ${name}`;
+}
+```
+
+When you want to access to a value inside nested object, the way of getting the value should be the same as the original object. That is:
+
+```javascript 
+const foo = {
+    bar: {
+        name: "Superman"
+    }
+};
+// if you want to get the "name" you should write the same way
+
+let {bar: {name}} = foo;
+
+console.log(name); // Superman
+```
+or
+```javascript 
+const foo = {
+    bar: {
+        name: "Superman"
+    }
+};
+// if you want to get the "name" you should write the same way
+
+let {bar: {name: heroName}} = foo;
+
+console.log(heroName); // Superman
+```
+> **Note**: If you try to access to "bar" or "name" it will throw an error.
+**Uncaught ReferenceError**: bar/name is not defined
+
+### Nested objects and array destructuring
+
+#### Example #2
+
+```javascript 
+const metadata = {
+  title: 'Scratchpad',
+  translations: [
+    {
+      locale: 'de',
+      localization_tags: [],
+      title: 'JavaScript-Umgebung'
+    }
+  ]
+};
+
+let {
+  title: englishTitle, 
+  translations: [
+    {
+       title: localeTitle, 
+    },
+  ],
+} = metadata;
+
+console.log(englishTitle); //Scratchpad
+console.log(localeTitle);  //JavaScript-Umgebung
+```
+
+> **Note**: As you see the structure is the same and parameter key names also
+
+#### Example #3
+Print *Tom Jones* and *Howard Jones*
+
+```javascript 
+const people = [
+  {
+    name: 'Mike Smith',
+    family: {
+      mother: 'Jane Smith',
+      father: 'Harry Smith',
+      sister: 'Samantha Smith'
+    },
+    age: 35
+  },
+  {
+    name: 'Tom Jones',
+    family: {
+      mother: 'Norah Jones',
+      father: 'Richard Jones',
+      brother: 'Howard Jones'
+    },
+    age: 25
+  }
+];
+
+//Since the 'people' is an array we will use the array destructuring first.
+
+let [, {name: firstBrother, family: {brother: secondBrother}}] = people;
+console.log(firstBrother, secondBrother); // Tom Jones Howard Jones
 ```
