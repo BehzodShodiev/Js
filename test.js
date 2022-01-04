@@ -18,5 +18,4 @@ const metadata = {
     ],
   } = metadata;
   
-  console.log(englishTitle); 
-  console.log(localeTitle); 
+  console.log(2.6898 + 0.25)
